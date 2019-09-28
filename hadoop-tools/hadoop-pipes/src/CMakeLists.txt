@@ -17,7 +17,9 @@
 #
 
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-find_package(OpenSSL REQUIRED)
+# find_package(OpenSSL REQUIRED)
+set (OPENSSL_INCLUDE_DIR "/usr/openssl-0.9.8l/include")
+set (OPENSSL_LIBRARIES "/usr/openssl-0.9.8l/lib")
 
 set(CMAKE_BUILD_TYPE, Release)
 
@@ -40,25 +42,27 @@ endfunction(output_directory TGT DIR)
 include_directories(
     main/native/utils/api
     main/native/pipes/api
+    /usr/include/tirpc
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${OPENSSL_INCLUDE_DIR}
 )
 
 # Example programs
+link_directories(/usr/openssl-0.9.8l/lib)
 add_executable(wordcount-simple main/native/examples/impl/wordcount-simple.cc)
-target_link_libraries(wordcount-simple hadooppipes hadooputils)
+target_link_libraries(wordcount-simple hadooppipes hadooputils tirpc ssl crypto)
 output_directory(wordcount-simple examples)
 
 add_executable(wordcount-part main/native/examples/impl/wordcount-part.cc)
-target_link_libraries(wordcount-part hadooppipes hadooputils)
+target_link_libraries(wordcount-part hadooppipes hadooputils tirpc ssl crypto)
 output_directory(wordcount-part examples)
 
 add_executable(wordcount-nopipe main/native/examples/impl/wordcount-nopipe.cc)
-target_link_libraries(wordcount-nopipe hadooppipes hadooputils)
+target_link_libraries(wordcount-nopipe hadooppipes hadooputils tirpc ssl crypto)
 output_directory(wordcount-nopipe examples)
 
 add_executable(pipes-sort main/native/examples/impl/sort.cc)
-target_link_libraries(pipes-sort hadooppipes hadooputils)
+target_link_libraries(pipes-sort hadooppipes hadooputils ssl tirpc ssl crypto)
 output_directory(pipes-sort examples)
 
 add_library(hadooputils STATIC

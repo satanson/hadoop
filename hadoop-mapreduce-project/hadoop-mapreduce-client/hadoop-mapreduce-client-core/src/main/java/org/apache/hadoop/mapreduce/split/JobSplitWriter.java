@@ -187,9 +187,11 @@ public class JobSplitWriter {
     FSDataOutputStream out = 
       FileSystem.create(fs, filename, p);
     out.write(JobSplit.META_SPLIT_FILE_HEADER);
+    LOG.warn(String.format("[QINGGUI] writeJobSplitMetaInfo: p=%s", filename));
     WritableUtils.writeVInt(out, splitMetaInfoVersion);
     WritableUtils.writeVInt(out, allSplitMetaInfo.length);
     for (JobSplit.SplitMetaInfo splitMetaInfo : allSplitMetaInfo) {
+      LOG.warn(String.format("[QINGGUI] writeJobSplitMetaInfo: splitMetaInfo=%s", splitMetaInfo.toString()));
       splitMetaInfo.write(out);
     }
     out.close();

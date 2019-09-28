@@ -298,7 +298,9 @@ class JobSubmitter {
     InputFormat<?, ?> input =
       ReflectionUtils.newInstance(job.getInputFormatClass(), conf);
 
+    LOG.warn(String.format("[QINGGUI] InputFormat=%s", input.getClass().getCanonicalName()));
     List<InputSplit> splits = input.getSplits(job);
+    LOG.warn(String.format("[QINGGUI] InputSplit=%s", splits.get(0).getClass().getCanonicalName()));
     T[] array = (T[]) splits.toArray(new InputSplit[splits.size()]);
 
     // sort the splits into order based on size, so that the biggest
@@ -315,8 +317,10 @@ class JobSubmitter {
     JobConf jConf = (JobConf)job.getConfiguration();
     int maps;
     if (jConf.getUseNewMapper()) {
+      LOG.warn("[QINGGUI] use writeNewSplits");
       maps = writeNewSplits(job, jobSubmitDir);
     } else {
+      LOG.warn("[QINGGUI] use writeOldSplits");
       maps = writeOldSplits(jConf, jobSubmitDir);
     }
     return maps;
@@ -327,6 +331,10 @@ class JobSubmitter {
   throws IOException {
     org.apache.hadoop.mapred.InputSplit[] splits =
     job.getInputFormat().getSplits(job, job.getNumMapTasks());
+    LOG.warn(String.format("[QINGGUI] job.getNumMapTasks=%d InputFormat=%s InputSplit=%s",
+      job.getNumMapTasks(),
+      job.getInputFormat().getClass().getCanonicalName(),
+      splits[0].getClass().getCanonicalName()));
     // sort the splits into order based on size, so that the biggest
     // go first
     Arrays.sort(splits, new Comparator<org.apache.hadoop.mapred.InputSplit>() {
@@ -347,6 +355,8 @@ class JobSubmitter {
         }
       }
     });
+
+    LOG.warn(String.format("[QINGGUI] jobSubmitDir=%s", jobSubmitDir.toUri()));
     JobSplitWriter.createSplitFiles(jobSubmitDir, job, 
         jobSubmitDir.getFileSystem(job), splits);
     return splits.length;

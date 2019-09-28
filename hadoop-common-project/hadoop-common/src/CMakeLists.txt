@@ -178,17 +178,17 @@ find_library(OPENSSL_LIBRARY
           ${CUSTOM_OPENSSL_PREFIX}/lib64 ${CUSTOM_OPENSSL_LIB} NO_DEFAULT_PATH)
 find_library(OPENSSL_LIBRARY NAMES ${OPENSSL_NAME})
 find_path(OPENSSL_INCLUDE_DIR 
-    NAMES openssl/evp.h
+    NAMES openssl-1.0/evp.h
     PATHS ${CUSTOM_OPENSSL_PREFIX} ${CUSTOM_OPENSSL_PREFIX}/include
           ${CUSTOM_OPENSSL_INCLUDE} NO_DEFAULT_PATH)
-find_path(OPENSSL_INCLUDE_DIR NAMES openssl/evp.h)
+find_path(OPENSSL_INCLUDE_DIR NAMES openssl-1.0/evp.h)
 SET(CMAKE_FIND_LIBRARY_SUFFIXES ${STORED_CMAKE_FIND_LIBRARY_SUFFIXES})
 SET(USABLE_OPENSSL 0)
 if (OPENSSL_LIBRARY AND OPENSSL_INCLUDE_DIR)
     INCLUDE(CheckCSourceCompiles)
     SET(OLD_CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES})
     SET(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
-    CHECK_C_SOURCE_COMPILES("#include \"${OPENSSL_INCLUDE_DIR}/openssl/evp.h\"\nint main(int argc, char **argv) { return !EVP_aes_256_ctr; }" HAS_NEW_ENOUGH_OPENSSL)
+    CHECK_C_SOURCE_COMPILES("#include \"${OPENSSL_INCLUDE_DIR}/openssl-1.0/evp.h\"\nint main(int argc, char **argv) { return !EVP_aes_256_ctr; }" HAS_NEW_ENOUGH_OPENSSL)
     SET(CMAKE_REQUIRED_INCLUDES ${OLD_CMAKE_REQUIRED_INCLUDES})
     if(NOT HAS_NEW_ENOUGH_OPENSSL)
         MESSAGE("The OpenSSL library installed at ${OPENSSL_LIBRARY} is too old.  You need a version at least new enough to have EVP_aes_256_ctr.")

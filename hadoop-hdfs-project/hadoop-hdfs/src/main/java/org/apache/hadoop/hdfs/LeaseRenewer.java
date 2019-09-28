@@ -161,7 +161,10 @@ class LeaseRenewer {
   /** The time in milliseconds that the map became empty. */
   private long emptyTime = Long.MAX_VALUE;
   /** A fixed lease renewal time period in milliseconds */
-  private long renewal = HdfsConstants.LEASE_SOFTLIMIT_PERIOD/2;
+  private long renewal = HdfsConstants.LEASE_SOFTLIMIT_PERIOD/10;
+  {
+    LOG.warn(String.format("lease renewal time period=%d", renewal));
+  }
 
   /** A daemon for renewing lease */
   private Daemon daemon = null;

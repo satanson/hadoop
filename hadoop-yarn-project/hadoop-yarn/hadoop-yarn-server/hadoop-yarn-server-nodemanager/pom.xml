@@ -186,7 +186,7 @@
                   <target>
                     <mkdir dir="${project.build.directory}/native/target"/>
                     <exec executable="cmake" dir="${project.build.directory}/native" failonerror="true">
-                      <arg line="${basedir}/src/ -DHADOOP_CONF_DIR=${container-executor.conf.dir} -DJVM_ARCH_DATA_MODEL=${sun.arch.data.model}"/>
+                      <arg line="${basedir}/src/  -DCMAKE_CXX_COMPILER=/usr/bin/x86_64-pc-linux-gnu-g++-4.9 -DCMAKE_C_COMPILER=/usr/bin/x86_64-pc-linux-gnu-gcc-4.9  -DHADOOP_CONF_DIR=${container-executor.conf.dir} -DJVM_ARCH_DATA_MODEL=${sun.arch.data.model}"/>
                       <env key="CFLAGS" value="${container-executor.additional_cflags}"/>
                     </exec>
                     <exec executable="make" dir="${project.build.directory}/native" failonerror="true">

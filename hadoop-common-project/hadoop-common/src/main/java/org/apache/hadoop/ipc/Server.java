@@ -319,6 +319,11 @@ public abstract class Server {
     return (call != null && call.connection != null) ? call.connection
         .getHostInetAddress() : null;
   }
+
+  public static int getRemotePort(){
+    Call call = CurCall.get();
+    return (call != null && call.connection != null) ? call.connection.socket.getPort(): -1;
+  }
   
   /**
    * Returns the clientId from the current RPC request

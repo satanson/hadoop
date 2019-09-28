@@ -27,6 +27,7 @@ import static org.apache.hadoop.util.Time.now;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Collection;
@@ -941,6 +942,17 @@ class NameNodeRpcServer implements NamenodeProtocols {
       stateChangeLog.debug("*DIR* Namenode.delete: src=" + src
           + ", recursive=" + recursive);
     }
+
+    LOG.info(
+      String.format(
+        "[QINGGUI_DEBUG] Delete file: src=%s, clientId=%s, remoteIp=%s remotePort=%d",
+        src,
+        new String(Server.getClientId()),
+        Server.getRemoteIp().getHostAddress(),
+        Server.getRemotePort()
+      )
+    );
+
     namesystem.checkOperation(OperationCategory.WRITE);
     CacheEntry cacheEntry = RetryCache.waitForCompletion(retryCache);
     if (cacheEntry != null && cacheEntry.isSuccess()) {

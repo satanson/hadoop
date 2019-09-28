@@ -889,7 +889,11 @@ public class DFSClient implements java.io.Closeable, RemotePeerFactory,
   boolean renewLease() throws IOException {
     if (clientRunning && !isFilesBeingWrittenEmpty()) {
       try {
+        long t0 = System.currentTimeMillis();
+        LOG.info(String.format("%s renewLease before", this.clientName));
         namenode.renewLease(clientName);
+        long t1 = System.currentTimeMillis();
+        LOG.info(String.format("%s renewLease after: cost=%d", this.clientName, t1 - t0));
         updateLastLeaseRenewal();
         return true;
       } catch (IOException e) {

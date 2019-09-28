@@ -20,17 +20,9 @@ package org.apache.hadoop.hdfs.server.namenode;
 import static org.apache.hadoop.util.Time.monotonicNow;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableSet;
-import java.util.NoSuchElementException;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.classification.InterfaceAudience;
@@ -226,6 +218,8 @@ public class LeaseManager {
   }
   synchronized void renewLease(Lease lease) {
     if (lease != null) {
+      List<String> paths = Lists.newArrayList(lease.paths.iterator());
+      LOG.info(String.format("renewLease: holder=%s paths=%s", lease.holder, Arrays.toString(paths.toArray())));
       sortedLeases.remove(lease);
       lease.renew();
       sortedLeases.add(lease);
